@@ -2,6 +2,9 @@
 This file contains the history of the changes made to the application.
 
 
+----- 13/02/2025 -----
+- Added LAN IP address info
+
 ----- 21/01/2025 -----
 - Application created and working
 

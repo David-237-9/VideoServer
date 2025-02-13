@@ -80,6 +80,10 @@ fun main() {
         }
     }.start(wait = false)
 
+    println("Server started at http://localhost:$port")
+    getLocalIpAddress().let { ip ->
+        println(if (ip == null) "LAN not available" else "For lAN access, visit http://${ip}:$port")
+    }
     println("Press Enter to exit")
     readln() // Wait for the user to press Enter before exiting
 }
