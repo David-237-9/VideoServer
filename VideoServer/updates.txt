@@ -4,7 +4,8 @@ This file contains the history of the changes made to the application.
 
 ----- 14/02/2025 -----
 - Added button options and shortcuts;
-- Added a menu
+- Added a menu;
+- Added language support
 
 ----- 13/02/2025 -----
 - Added LAN IP address info

@@ -9,6 +9,9 @@ const buttonToggleSubtitles = '6';
 const buttonBigSkipBackward = '7';
 const buttonBigSkipForward = '8';
 
+const smallSkip = 10;
+const bigSkip = 120;
+
 function onKeyDown(event) {
     if (event.key === buttonToggleMenu/** || event.keyCode === 49 || event.keyCode === 101*/) {
         toggleMenu();
@@ -17,15 +20,15 @@ function onKeyDown(event) {
     } else if (event.key === buttonPlayPause) {
         togglePlayPause();
     } else if (event.key === buttonSkipBackward) {
-        skipBackward(10);
+        skipBackward(smallSkip);
     } else if (event.key === buttonSkipForward) {
-        skipForward(10);
+        skipForward(smallSkip);
     } else if (event.key === buttonToggleSubtitles) {
         toggleSubtitles();
     } else if (event.key === buttonBigSkipBackward) {
-        skipBackward(120);
+        skipBackward(bigSkip);
     } else if (event.key === buttonBigSkipForward) {
-        skipForward(120);
+        skipForward(bigSkip);
     }
 }
 
@@ -35,15 +38,7 @@ function onKeyDown(event) {
  */
 function getMenuToggler(){
     let menuVisible = 0; // Initial state will be toggled automatically 1 time on load
-    const infoToggleMenu = `Press '${buttonToggleMenu}' to toggle menu`;
-    const menuInfo = infoToggleMenu +
-        `\nPress '${buttonToggleFullscreen}' to toggle full screen mode` +
-        `\nPress '${buttonPlayPause}' to play/pause the video` +
-        `\nPress '${buttonSkipBackward}' to go backwards 10 seconds` +
-        `\nPress '${buttonSkipForward}' to go forward 10 seconds` +
-        `\nPress '${buttonToggleSubtitles}' to toggle subtitles` +
-        `\nPress '${buttonBigSkipBackward}' to go backwards 2 minutes` +
-        `\nPress '${buttonBigSkipForward}' to go forward 2 minutes`;
+    const lang = navigator.language || navigator.userLanguage; // Get the browser language
 
     /**
      * Toggle menu
@@ -55,9 +50,21 @@ function getMenuToggler(){
         if (menuVisible === 0) {
             menuElem.innerHTML = '';
         } else if (menuVisible === 1) {
-            menuElem.innerHTML = infoToggleMenu;
+            menuElem.innerHTML = getInfoToggleMenu(lang, buttonToggleMenu);
         } else if (menuVisible === 2) {
-            menuElem.innerHTML = menuInfo;
+            menuElem.innerHTML = getMenuInfo(
+                lang,
+                buttonToggleMenu,
+                buttonToggleFullscreen,
+                buttonPlayPause,
+                buttonSkipBackward,
+                buttonSkipForward,
+                buttonToggleSubtitles,
+                buttonBigSkipBackward,
+                buttonBigSkipForward,
+                smallSkip,
+                bigSkip
+            );
         }
     }
 
@@ -137,4 +144,99 @@ function toggleSubtitles() {
     if (nextTrack < tracks.length) {
         tracks[nextTrack].mode = 'showing';
     }
+}
+
+/**
+ * Get the menu info text
+ * @param lang - Language code
+ * @param button - Button to toggle the menu
+ * @returns {string} - Menu info text
+ */
+function getInfoToggleMenu(lang, button) {
+    if (lang === 'pt' || lang === 'pt-PT' || lang === 'pt-BR')
+        return `Pressione '${button}' para alterar o menu`;
+    else if (lang === 'es' || lang === 'es-ES' || lang === 'es-AR' || lang === 'es-MX')
+        return `Presiona '${button}' para alternar el menú`;
+    else if (lang === 'fr' || lang === 'fr-FR')
+        return `Appuyez sur '${button}' pour basculer le menu`;
+    else if (lang === 'de' || lang === 'de-DE')
+        return `Drücken Sie '${button}', um das Menü umzuschalten`;
+    else
+        return `Press '${button}' to toggle menu`;
+}
+
+/**
+ * Get the menu info text
+ * @param lang - Language code
+ * @param buttonToggleMenu - Button to toggle the menu
+ * @param buttonToggleFullscreen - Button to toggle fullscreen
+ * @param buttonPlayPause - Button to play/pause
+ * @param buttonSkipBackward - Button to skip backward
+ * @param buttonSkipForward - Button to skip forward
+ * @param buttonToggleSubtitles - Button to toggle subtitles
+ * @param buttonBigSkipBackward - Button to skip backward 2 minutes
+ * @param buttonBigSkipForward - Button to skip forward 2 minutes
+ * @param smallSkip - Number of seconds to skip in small skip
+ * @param bigSkip - Number of seconds to skip in big skip
+ * @returns {string} - Menu info text
+ */
+function getMenuInfo(
+    lang,
+    buttonToggleMenu,
+    buttonToggleFullscreen,
+    buttonPlayPause,
+    buttonSkipBackward,
+    buttonSkipForward,
+    buttonToggleSubtitles,
+    buttonBigSkipBackward,
+    buttonBigSkipForward,
+    smallSkip,
+    bigSkip
+) {
+    const infoToggleMenu = getInfoToggleMenu(lang, buttonToggleMenu);
+    if (lang === 'pt' || lang === 'pt-PT' || lang === 'pt-BR')
+        return infoToggleMenu +
+            `\nPressione '${buttonToggleFullscreen}' para alterar o modo de ecrã inteiro` +
+            `\nPressione '${buttonPlayPause}' para reproduzir/pausar o vídeo` +
+            `\nPressione '${buttonSkipBackward}' para retroceder ${smallSkip} segundos` +
+            `\nPressione '${buttonSkipForward}' para avançar ${smallSkip} segundos` +
+            `\nPressione '${buttonToggleSubtitles}' para alterar legendas` +
+            `\nPressione '${buttonBigSkipBackward}' para retroceder ${bigSkip} segundos` +
+            `\nPressione '${buttonBigSkipForward}' para avançar ${bigSkip} segundos`;
+    else if (lang === 'es' || lang === 'es-ES' || lang === 'es-AR' || lang === 'es-MX')
+        return infoToggleMenu +
+            `\nPresiona '${buttonToggleFullscreen}' para alternar el modo de pantalla completa` +
+            `\nPresiona '${buttonPlayPause}' para reproducir/pausar el video` +
+            `\nPresiona '${buttonSkipBackward}' para retroceder ${smallSkip} segundos` +
+            `\nPresiona '${buttonSkipForward}' para avanzar ${smallSkip} segundos` +
+            `\nPresiona '${buttonToggleSubtitles}' para alternar subtítulos` +
+            `\nPresiona '${buttonBigSkipBackward}' para retroceder ${bigSkip} segundos` +
+            `\nPresiona '${buttonBigSkipForward}' para avanzar ${bigSkip} segundos`;
+    else if (lang === 'fr' || lang === 'fr-FR')
+        return infoToggleMenu +
+            `\nAppuyez sur '${buttonToggleFullscreen}' pour basculer en mode plein écran` +
+            `\nAppuyez sur '${buttonPlayPause}' pour lire/mettre en pause la vidéo` +
+            `\nAppuyez sur '${buttonSkipBackward}' pour reculer de ${smallSkip} secondes` +
+            `\nAppuyez sur '${buttonSkipForward}' pour avancer de ${smallSkip} secondes` +
+            `\nAppuyez sur '${buttonToggleSubtitles}' pour basculer les sous-titres` +
+            `\nAppuyez sur '${buttonBigSkipBackward}' pour reculer de ${bigSkip} secondes` +
+            `\nAppuyez sur '${buttonBigSkipForward}' pour avancer de ${bigSkip} secondes`;
+    else if (lang === 'de' || lang === 'de-DE')
+        return infoToggleMenu +
+            `\nDrücken Sie '${buttonToggleFullscreen}', um den Vollbildmodus zu aktivieren` +
+            `\nDrücken Sie '${buttonPlayPause}', um das Video abzuspielen/anzuhalten` +
+            `\nDrücken Sie '${buttonSkipBackward}', um ${smallSkip} Sekunden zurückzugehen` +
+            `\nDrücken Sie '${buttonSkipForward}', um ${smallSkip} Sekunden vorzuspulen` +
+            `\nDrücken Sie '${buttonToggleSubtitles}', um Untertitel umzuschalten` +
+            `\nDrücken Sie '${buttonBigSkipBackward}', um ${bigSkip} Sekunden zurückzugehen` +
+            `\nDrücken Sie '${buttonBigSkipForward}', um ${bigSkip} Sekunden vorzuspulen`;
+    else
+        return infoToggleMenu +
+            `\nPress '${buttonToggleFullscreen}' to toggle full screen mode` +
+            `\nPress '${buttonPlayPause}' to play/pause the video` +
+            `\nPress '${buttonSkipBackward}' to go backwards ${smallSkip} seconds` +
+            `\nPress '${buttonSkipForward}' to go forward ${smallSkip} seconds` +
+            `\nPress '${buttonToggleSubtitles}' to toggle subtitles` +
+            `\nPress '${buttonBigSkipBackward}' to go backwards ${bigSkip} seconds` +
+            `\nPress '${buttonBigSkipForward}' to go forward ${bigSkip} seconds`;
 }
