@@ -1,8 +1,8 @@
 import java.io.File
 
-const val STORAGE_PATH = "storage"
-const val VIDEO_PATH_PREFIX = "$STORAGE_PATH/"
-const val SUBTITLES_PATH_PREFIX = "$STORAGE_PATH/"
+private const val STORAGE_PATH = "storage"
+private const val VIDEO_PATH_PREFIX = "$STORAGE_PATH/"
+private const val SUBTITLES_PATH_PREFIX = "$STORAGE_PATH/"
 
 object Storage {
     /**
