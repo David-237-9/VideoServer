@@ -4,6 +4,7 @@ This file contains the history of the changes made to the application.
 
 ----- 03/10/2025 -----
 - Created a storage object to improve reliability;
+- Created a new server file
 
 ----- 14/02/2025 -----
 - Added button options and shortcuts;
