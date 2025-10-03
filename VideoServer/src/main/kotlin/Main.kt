@@ -7,32 +7,29 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
-import java.io.File
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 
-const val videoName = "video.mp4" // Set the video name
-const val subtitlesName = "subtitles.srt" // Set the subtitles name (SRT format)
+const val VIDEO_NAME = "a.mkv" // Set the video name
+const val SUBTITLES_NAME = "a.srt" // Set the subtitles name (SRT format)
 
-const val port = 3000 // Port to listen on
-
-const val storagePath = "storage" // Folder where the video and subtitles are stored
-const val videoPath = "$storagePath/$videoName"
-const val subtitlesPath = "$storagePath/$subtitlesName"
+const val PORT = 3000 // Port to listen on
 
 fun main() {
-    val vttSubtitlesPath = loadSrt(subtitlesPath) ?: run { // Load the subtitles and convert them to VTT format
+    Storage.init()
+
+    val vttSubtitlesPath = Storage.getSubtitlesFile(SUBTITLES_NAME) ?: run { // Load the subtitles and convert them to VTT format
         println("Subtitles file not found")
         return
     }
 
-    embeddedServer(factory = Netty, port = port) { // Start the server
+    embeddedServer(factory = Netty, port = PORT) { // Start the server
         routing {
             staticResources("/", "static")
 
             get("/video") { // Serve the video file
-                val videoFile = File(videoPath)
-                if (!videoFile.exists()) {
+                val videoFile = Storage.getVideoFile(VIDEO_NAME)
+                if (videoFile == null) {
                     call.respond(HttpStatusCode.NotFound)
                     return@get
                 }
@@ -80,9 +77,9 @@ fun main() {
         }
     }.start(wait = false)
 
-    println("Server started at http://localhost:$port")
+    println("Server started at http://localhost:$PORT")
     getLocalIpAddress().let { ip ->
-        println(if (ip == null) "LAN not available" else "For lAN access, visit http://${ip}:$port")
+        println(if (ip == null) "LAN not available" else "For lAN access, visit http://${ip}:$PORT")
     }
     println("Press Enter to exit")
     readln() // Wait for the user to press Enter before exiting
