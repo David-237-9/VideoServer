@@ -23,15 +23,13 @@ const val PORT = 3000 // Port to listen on
 const val VIDEO_ROUTING_PATH = "/video" // Path to access the video
 const val SUBTITLES_ROUTING_PATH = "/subtitles" // Path to access the
 
-fun runServer(videoName: String, subtitlesName: String): Boolean {
+fun runServer(videoName: String, subtitlesName: String?): Boolean {
     val videoFile = Storage.getVideoFile(videoName)
     if (videoFile == null) {
         println("Video file not found")
         return false
     }
-    val vttSubtitlesPath = Storage.getSubtitlesFile(subtitlesName) // Load the subtitles and convert them to VTT format
-    if (vttSubtitlesPath == null)
-        println("Subtitles file not found, continuing without subtitles")
+    val vttSubtitlesPath = subtitlesName?.let { Storage.getSubtitlesFile(it) } // Load the subtitles and convert them to VTT format if they exist
 
     embeddedServer(factory = Netty, port = PORT) { // Start the server
         routing {

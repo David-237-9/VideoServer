@@ -22,6 +22,15 @@ object Storage {
     }
 
     /**
+     * Lists all files in the storage directory.
+     * @return A list of file names in the storage directory.
+     */
+    fun listFiles(): List<String> {
+        val storageDir = File(STORAGE_PATH)
+        return storageDir.list()?.toList() ?: emptyList()
+    }
+
+    /**
      * Returns the video file if it exists, otherwise returns null.
      * @param videoName The name of the video file.
      * @return The video file or null if it doesn't exist.

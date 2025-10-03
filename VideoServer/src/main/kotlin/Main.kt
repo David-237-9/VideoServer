@@ -1,10 +1,14 @@
-private const val VIDEO_NAME = "video.mp4" // Set the video name
-private const val SUBTITLES_NAME = "subtitles.srt" // Set the subtitles name (SRT format)
-
 fun main() {
     Storage.init()
 
-    if (runServer(VIDEO_NAME, SUBTITLES_NAME)) {
+    val filenames = Storage.listFiles()
+    val (videoName, subtitlesName) = getVideoAndSubtitlesFromUser(filenames)
+        ?: run {
+            println("Input failed. Exiting...")
+            return
+        }
+
+    if (runServer(videoName, subtitlesName)) {
         println("Press Enter to exit")
         readln() // Wait for the user to press Enter before exiting
     }
