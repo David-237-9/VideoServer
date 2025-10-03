@@ -10,9 +10,7 @@ object Storage {
      */
     fun init() {
         val storageDir = File(STORAGE_PATH)
-        println(storageDir)
         if (!storageDir.exists()) {
-            println("Creating storage directory at $STORAGE_PATH")
             storageDir.mkdirs()
             val created = storageDir.exists()
             if (!created) {

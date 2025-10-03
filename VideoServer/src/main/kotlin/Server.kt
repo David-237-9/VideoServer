@@ -20,6 +20,9 @@ import kotlin.text.removePrefix
 
 const val PORT = 3000 // Port to listen on
 
+const val VIDEO_ROUTING_PATH = "/video" // Path to access the video
+const val SUBTITLES_ROUTING_PATH = "/subtitles" // Path to access the
+
 fun runServer(videoName: String, subtitlesName: String): Boolean {
     val videoFile = Storage.getVideoFile(videoName)
     if (videoFile == null) {
@@ -34,7 +37,7 @@ fun runServer(videoName: String, subtitlesName: String): Boolean {
         routing {
             staticResources("/", "static")
 
-            get("/video") { // Serve the video file
+            get(VIDEO_ROUTING_PATH) { // Serve the video file
                 val range = call.request.headers["Range"]
                 if (range == null) {
                     call.respondFile(videoFile)
@@ -72,11 +75,16 @@ fun runServer(videoName: String, subtitlesName: String): Boolean {
                 }
             }
 
-            get("/subtitles") { // Serve the subtitles file
+            get(SUBTITLES_ROUTING_PATH) { // Serve the subtitles file
                 call.respondText(vttSubtitlesPath?.readText(charset) ?: "No subtitles available")
             }
         }
     }.start(wait = false)
+
+    println("Server started at http://localhost:$PORT")
+    getLocalIpAddress().let { ip ->
+        println(if (ip == null) "LAN not available" else "For lAN access, visit http://${ip}:$PORT")
+    }
 
     return true
 }
