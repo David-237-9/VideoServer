@@ -9,12 +9,16 @@ This application is a simple video player server built using Kotlin and Ktor. It
 
 ## Running the Application
 
-To run the application, execute the `main` function in `Main.kt`. The server will start on port selected port, and you can access the video player at `http://localhost:{port}/` or by LAN using another device.
+(Instructions to run the application would go here)
 
 ## File Structure
 
 - `src/main/resources/static/index.html`: Contains the HTML for the video player.
-- `src/main/kotlin/Auxiliar.kt`: Contains functions to convert SRT subtitles to VTT format.
+- `src/main/resources/static/js/commands.js`: Contains JavaScript for handling video player commands.
+- `src/main/kotlin/FilesAuxiliar.kt`: Contains functions related to file handling and subtitle conversion.
+- `src/main/kotlin/Ip.kt`: Contains functions to get the local IP address.
 - `src/main/kotlin/Main.kt`: Contains the main server code to serve the video and subtitles.
-- `storage/video.mp4`: The video file to be served.
-- `storage/subtitles.srt`: The SRT subtitles file to be converted and served.
+- `src/main/kotlin/Server.kt`: Contains server configuration and routing.
+- `src/main/kotlin/Storage.kt`: Contains functions related to storage management.
+- `src/main/test/`: Directory that contains test cases for the application.
+- `storage/`: Directory where the video file and subtitles are stored.
