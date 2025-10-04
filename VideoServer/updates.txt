@@ -3,7 +3,8 @@ This file contains the history of the changes made to the application.
 
 
 ----- 04/10/2025 -----
-- Updated messages and texts
+- Updated messages and texts;
+- Bug fixing
 
 ----- 03/10/2025 -----
 - Created a storage object and test to improve reliability;
