@@ -1,3 +1,5 @@
+package dev.david2379.videoserver
+
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.OutgoingContent

@@ -1,3 +1,5 @@
+package dev.david2379.videoserver
+
 import java.nio.charset.Charset
 
 val charset: Charset = Charset.forName("windows-1252") // Charset used to read and write the subtitles

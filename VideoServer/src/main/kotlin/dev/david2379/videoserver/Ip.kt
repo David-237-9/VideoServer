@@ -1,3 +1,5 @@
+package dev.david2379.videoserver
+
 import java.net.InetAddress
 import java.net.NetworkInterface
 

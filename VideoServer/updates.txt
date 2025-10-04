@@ -4,6 +4,9 @@ This file contains the history of the changes made to the application.
 
 ----- 04/10/2025 -----
 - Updated messages and texts;
+- Updated server paths;
+- Created the run command;
+- Updated project group to "dev.david2379.videoserver";
 - Bug fixing
 
 ----- 03/10/2025 -----

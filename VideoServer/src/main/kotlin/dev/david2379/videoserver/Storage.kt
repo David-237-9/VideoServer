@@ -1,3 +1,5 @@
+package dev.david2379.videoserver
+
 import java.io.File
 
 private const val STORAGE_PATH = "storage"

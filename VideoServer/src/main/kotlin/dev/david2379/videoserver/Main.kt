@@ -1,3 +1,5 @@
+package dev.david2379.videoserver
+
 fun main() {
     Storage.init()
 

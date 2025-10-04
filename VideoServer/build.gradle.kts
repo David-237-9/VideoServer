@@ -3,7 +3,7 @@ plugins {
     application
 }
 
-group = "org.example"
+group = "dev.david2379.videoserver"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -19,7 +19,7 @@ dependencies {
 }
 
 application {
-    mainClass = "MainKt"
+    mainClass = "dev.david2379.videoserver.MainKt"
 }
 
 tasks.named<JavaExec>("run") {
