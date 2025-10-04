@@ -4,7 +4,7 @@ fun main() {
     val filenames = Storage.listFiles()
     val (videoName, subtitlesName) = getVideoAndSubtitlesFromUser(filenames)
         ?: run {
-            println("Input failed. Exiting...")
+            println("File input failed. Exiting...")
             return
         }
 

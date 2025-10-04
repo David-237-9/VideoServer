@@ -27,11 +27,17 @@ fun srtSubsToVtt(srt: String): String {
  */
 fun getVideoAndSubtitlesFromUser(filenames: List<String>): Pair<String, String?>? {
     val compatibleVideos = filenames.filter { isCompatibleVideoFile(it) }
-    if (compatibleVideos.isEmpty()) return null
-    println("Choose the video file name by its number:")
+    if (compatibleVideos.isEmpty()) {
+        println("No compatible video files found!")
+        return null
+    }
+    println("Choose the video file name by its number (or press Enter to exit):")
     filenamesPrinter(compatibleVideos)
     val inputV = readln().toIntOrNull()
-    if (inputV == null || inputV !in 1.. compatibleVideos.size) return null
+    if (inputV == null || inputV !in 1.. compatibleVideos.size) {
+        println("Invalid input!")
+        return null
+    }
     val videoName = compatibleVideos[inputV - 1]
     println("Video selected: $videoName")
 
