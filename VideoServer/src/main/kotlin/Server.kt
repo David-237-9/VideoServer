@@ -6,8 +6,10 @@ import io.ktor.server.application.call
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.netty.Netty
+import io.ktor.server.plugins.origin
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondFile
+import io.ktor.server.response.respondRedirect
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
@@ -20,8 +22,12 @@ import kotlin.text.removePrefix
 
 const val PORT = 3000 // Port to listen on
 
+const val DEFAULT_PATH = "/"
+const val WATCH_PATH = "/watch"
 const val VIDEO_ROUTING_PATH = "/video" // Path to access the video
 const val SUBTITLES_ROUTING_PATH = "/subtitles" // Path to access the
+
+const val STATIC_PACKAGE_PATH = "/static"
 
 fun runServer(videoName: String, subtitlesName: String?): Boolean {
     val videoFile = Storage.getVideoFile(videoName)
@@ -33,7 +39,13 @@ fun runServer(videoName: String, subtitlesName: String?): Boolean {
 
     embeddedServer(factory = Netty, port = PORT) { // Start the server
         routing {
-            staticResources("/", "static")
+            get(DEFAULT_PATH) {
+                call.respondRedirect(WATCH_PATH)
+                val remoteHost = call.request.origin.remoteHost
+                println("New connection from: $remoteHost")
+            }
+
+            staticResources(WATCH_PATH, "$STATIC_PACKAGE_PATH/watch")
 
             get(VIDEO_ROUTING_PATH) { // Serve the video file
                 val range = call.request.headers["Range"]
