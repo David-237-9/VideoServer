@@ -9,7 +9,19 @@ This application is a simple video player server built using Kotlin and Ktor. It
 
 ## Running the Application
 
-(Instructions to run the application would go here)
+Run the application with the following command at the project base directory (where gradlew is located):
+#### Unix / macOS
+```
+./gradlew run
+```
+#### Windows (PowerShell / CMD)
+```
+.\gradlew run
+```
+or
+```
+gradlew run
+```
 
 ## File Structure
 

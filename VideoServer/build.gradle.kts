@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.0"
+    application
 }
 
 group = "org.example"
@@ -15,6 +16,14 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.13")
 
     testImplementation(kotlin("test"))
+}
+
+application {
+    mainClass = "MainKt"
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
 }
 
 tasks.test {
