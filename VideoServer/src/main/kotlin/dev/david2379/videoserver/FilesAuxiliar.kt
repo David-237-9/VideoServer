@@ -14,7 +14,8 @@ fun srtSubsToVtt(srt: String): String {
 
     vttBuilder.append("WEBVTT\n\n") // Add the VTT header
 
-    srt.lines().forEach { line ->// Process each line
+    srt.lines().forEach { line ->
+        // Process each line
         val convertedLine = line.replace(Regex("(\\d{2}:\\d{2}:\\d{2}),(\\d{3})"), "$1.$2") // Replace timestamp commas with periods
         vttBuilder.append(convertedLine).append("\n") // Append the line to the VTT subtitles
     }
@@ -36,7 +37,7 @@ fun getVideoAndSubtitlesFromUser(filenames: List<String>): Pair<String, String?>
     println("Choose the video file name by its number (or press Enter to exit):")
     filenamesPrinter(compatibleVideos)
     val inputV = readln().toIntOrNull()
-    if (inputV == null || inputV !in 1.. compatibleVideos.size) {
+    if (inputV == null || inputV !in 1..compatibleVideos.size) {
         println("Invalid input!")
         return null
     }
@@ -48,10 +49,17 @@ fun getVideoAndSubtitlesFromUser(filenames: List<String>): Pair<String, String?>
     println("Choose the subtitles file name by its number (or press Enter to skip):")
     filenamesPrinter(compatibleSubtitles)
     val inputS = readln().toIntOrNull()
-    val subtitlesName = if (inputS == null || inputS !in 1.. compatibleSubtitles.size) null
-        else compatibleSubtitles[inputS - 1]
-    if (subtitlesName == null) println("No subtitles selected")
-    else println("Subtitles selected: $subtitlesName")
+    val subtitlesName =
+        if (inputS == null || inputS !in 1..compatibleSubtitles.size) {
+            null
+        } else {
+            compatibleSubtitles[inputS - 1]
+        }
+    if (subtitlesName == null) {
+        println("No subtitles selected")
+    } else {
+        println("Subtitles selected: $subtitlesName")
+    }
 
     return Pair(videoName, subtitlesName)
 }
@@ -59,14 +67,12 @@ fun getVideoAndSubtitlesFromUser(filenames: List<String>): Pair<String, String?>
 /**
  * Check if the given filename is a compatible video file.
  */
-private fun isCompatibleVideoFile(filename: String): Boolean =
-    filename.endsWith(".mp4") || filename.endsWith(".mkv")
+private fun isCompatibleVideoFile(filename: String): Boolean = filename.endsWith(".mp4") || filename.endsWith(".mkv")
 
 /**
  * Check if the given filename is a compatible subtitles file.
  */
-private fun isCompatibleSubtitlesFile(subtitle: String): Boolean =
-    subtitle.endsWith(".srt")
+private fun isCompatibleSubtitlesFile(subtitle: String): Boolean = subtitle.endsWith(".srt")
 
 /**
  * Print the list of filenames in a formatted way.

@@ -25,7 +25,7 @@ import kotlin.text.removePrefix
 
 const val START_PORT = 3000 // Initial port to the server
 
-var current_port = START_PORT
+var currentPort = START_PORT
 
 const val DEFAULT_PATH = "/"
 const val WATCH_PATH = "/watch"
@@ -40,18 +40,25 @@ const val STATIC_PACKAGE_PATH = "/static"
  * @param subtitlesName Name of the subtitles file to serve (optional)
  * @return true if the server started successfully, false otherwise
  */
-fun runServer(videoName: String, subtitlesName: String?): Boolean {
+fun runServer(
+    videoName: String,
+    subtitlesName: String?,
+): Boolean {
     // Load the files
     val videoFile = Storage.getVideoFile(videoName)
     if (videoFile == null) {
         println("Error retrieving video file")
         return false
     }
-    val vttSubtitlesPath = subtitlesName?.let { Storage.getSubtitlesFile(it) } // Load the subtitles and convert them to VTT format if they exist
+    val vttSubtitlesPath = // Load the subtitles and convert them to VTT format if they exist
+        subtitlesName?.let {
+            Storage.getSubtitlesFile(it)
+        }
 
     // Function to start the server
     fun start() {
-        embeddedServer(factory = Netty, port = current_port++) { // Start the server
+        embeddedServer(factory = Netty, port = currentPort++) {
+            // Start the server
             routing {
                 get(DEFAULT_PATH) {
                     call.respondRedirect(WATCH_PATH)
@@ -59,9 +66,11 @@ fun runServer(videoName: String, subtitlesName: String?): Boolean {
                     println("New connection from: $remoteHost")
                 }
 
+                // Serve static files for the watch page
                 staticResources(WATCH_PATH, "$STATIC_PACKAGE_PATH/watch")
 
-                get(VIDEO_ROUTING_PATH) { // Serve the video file
+                // Serve the video file
+                get(VIDEO_ROUTING_PATH) {
                     val range = call.request.headers["Range"]
                     if (range == null) {
                         call.respondFile(videoFile)
@@ -72,35 +81,40 @@ fun runServer(videoName: String, subtitlesName: String?): Boolean {
                             if (ranges.size > 1 && ranges[1].isNotEmpty()) ranges[1].toLong() else videoFile.length() - 1
                         val length = end - start + 1
 
-                        call.respond(object : OutgoingContent.ReadChannelContent() {
-                            override val contentLength: Long = length
-                            override val contentType = ContentType.Video.MP4
-                            override val status = HttpStatusCode.PartialContent
-                            override val headers = headersOf(
-                                "Content-Range" to listOf("bytes $start-$end/${videoFile.length()}")
-                            )
+                        call.respond(
+                            object : OutgoingContent.ReadChannelContent() {
+                                override val contentLength: Long = length
+                                override val contentType = ContentType.Video.MP4
+                                override val status = HttpStatusCode.PartialContent
+                                override val headers =
+                                    headersOf(
+                                        "Content-Range" to listOf("bytes $start-$end/${videoFile.length()}"),
+                                    )
 
-                            override fun readFrom(): ByteReadChannel = writer {
-                                val fileChannel = RandomAccessFile(videoFile, "r").channel
-                                fileChannel.position(start)
-                                val buffer = ByteBuffer.allocate(8192)
-                                var remaining = length
-                                while (remaining > 0) {
-                                    buffer.clear()
-                                    val bytesRead = fileChannel.read(buffer)
-                                    if (bytesRead == -1) break
-                                    buffer.flip()
-                                    channel.writeFully(buffer)
-                                    remaining -= bytesRead
-                                }
-                                fileChannel.close()
-                                channel.close()
-                            }.channel
-                        })
+                                override fun readFrom(): ByteReadChannel =
+                                    writer {
+                                        val fileChannel = RandomAccessFile(videoFile, "r").channel
+                                        fileChannel.position(start)
+                                        val buffer = ByteBuffer.allocate(8192)
+                                        var remaining = length
+                                        while (remaining > 0) {
+                                            buffer.clear()
+                                            val bytesRead = fileChannel.read(buffer)
+                                            if (bytesRead == -1) break
+                                            buffer.flip()
+                                            channel.writeFully(buffer)
+                                            remaining -= bytesRead
+                                        }
+                                        fileChannel.close()
+                                        channel.close()
+                                    }.channel
+                            },
+                        )
                     }
                 }
 
-                get(SUBTITLES_ROUTING_PATH) { // Serve the subtitles file
+                // Serve the subtitles file
+                get(SUBTITLES_ROUTING_PATH) {
                     call.respondText(vttSubtitlesPath?.readText(charset) ?: "No subtitles available")
                 }
             }
@@ -121,9 +135,9 @@ fun runServer(videoName: String, subtitlesName: String?): Boolean {
     } while (!done)
 
     // Server started successfully
-    println("Server started at http://localhost:$current_port")
+    println("Server started at http://localhost:$currentPort")
     getLocalIpAddress().let { ip ->
-        println(if (ip == null) "LAN not available" else "For lAN access, visit http://${ip}:$current_port")
+        println(if (ip == null) "LAN not available" else "For lAN access, visit http://$ip:$currentPort")
     }
 
     return true

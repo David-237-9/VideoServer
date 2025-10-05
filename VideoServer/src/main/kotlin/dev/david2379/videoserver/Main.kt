@@ -4,11 +4,12 @@ fun main() {
     Storage.init()
 
     val filenames = Storage.listFiles()
-    val (videoName, subtitlesName) = getVideoAndSubtitlesFromUser(filenames)
-        ?: run {
-            println("File input failed. Exiting...")
-            return
-        }
+    val (videoName, subtitlesName) =
+        getVideoAndSubtitlesFromUser(filenames)
+            ?: run {
+                println("File input failed. Exiting...")
+                return
+            }
 
     if (runServer(videoName, subtitlesName)) {
         println("Press Enter to exit")

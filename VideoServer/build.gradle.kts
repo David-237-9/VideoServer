@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.0.0"
     application
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
 
 group = "dev.david2379.videoserver"

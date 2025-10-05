@@ -20,7 +20,7 @@ class StorageTests {
         Storage.init()
 
         // Assert
-        assert(storageDir.exists()) { "Storage directory was not created at $STORAGE_PATH"}
+        assert(storageDir.exists()) { "Storage directory was not created at $STORAGE_PATH" }
 
         // Cleanup after test
         storageDir.deleteRecursively()
@@ -28,7 +28,10 @@ class StorageTests {
         tempStorageDir.deleteRecursively()
     }
 
-    fun moveAllFilesAndFolders(sourceDir: File, targetDir: File) {
+    fun moveAllFilesAndFolders(
+        sourceDir: File,
+        targetDir: File,
+    ) {
         if (!targetDir.exists()) targetDir.mkdirs()
         sourceDir.listFiles()?.forEach { file ->
             val target = File(targetDir, file.name)
