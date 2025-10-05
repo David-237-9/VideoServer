@@ -2,6 +2,9 @@
 This file contains the history of the changes made to the application.
 
 
+----- 05/10/2025 -----
+- Automatic port selection
+
 ----- 04/10/2025 -----
 - Updated messages and texts;
 - Updated server paths;
